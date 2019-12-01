@@ -47,28 +47,29 @@ metadata:
     addonmanager.kubernetes.io/mode: Reconcile
     kubernetes.io/name: "Kibana"
 spec:
+  type: LoadBalancer
   ports:
   - port: 5601
     protocol: TCP
     targetPort: ui
   selector:
     k8s-app: kibana-logging
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: logs-ingress
-  namespace: kube-system
-  labels:
-    app: logs
-  annotations:
-    kubernetes.io/ingress.class: traefik
-spec:
-  rules:
-  - host: logs.example.com
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: kibana-logging
-          servicePort: 5601
+#---
+#apiVersion: extensions/v1beta1
+#kind: Ingress
+#metadata:
+#  name: logs-ingress
+#  namespace: kube-system
+#  labels:
+#    app: logs
+#  annotations:
+#    kubernetes.io/ingress.class: ingress
+#spec:
+#  rules:
+#  - host: logs.sdcilsy-charlie-web.id
+#    http:
+#      paths:
+#      - path: /
+#        backend:
+#          serviceName: kibana-logging
+#          servicePort: 5601
