@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: metricbeat-config
-  namespace: kube-system
+  namespace: bp-log
   labels:
     k8s-app: metricbeat
 data:
@@ -23,12 +23,14 @@ data:
       hosts: ['${ELASTICSEARCH_HOST:elasticsearch}:${ELASTICSEARCH_PORT:9200}']
       username: ${ELASTICSEARCH_USERNAME}
       password: ${ELASTICSEARCH_PASSWORD}
+
 ---
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: metricbeat-daemonset-modules
-  namespace: kube-system
+  namespace: bp-log
   labels:
     k8s-app: metricbeat
 data:
@@ -68,13 +70,15 @@ data:
         - volume
       period: 10s
       hosts: ["localhost:10255"]
+
 ---
+
 # Deploy a Metricbeat instance per node for node metrics retrieval
 apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
   name: metricbeat
-  namespace: kube-system
+  namespace: bp-log
   labels:
     k8s-app: metricbeat
 spec:
@@ -159,12 +163,14 @@ spec:
       # files survive pod changes (ie: version upgrade)
       - name: data
         emptyDir: {}
+
 ---
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: metricbeat-deployment-modules
-  namespace: kube-system
+  namespace: bp-log
   labels:
     k8s-app: metricbeat
 data:
@@ -181,13 +187,15 @@ data:
         #- event
       period: 10s
       hosts: ["kube-state-metrics:8080"]
+
 ---
+
 # Deploy singleton instance in the whole cluster for some unique data sources, like kube-state-metrics
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: metricbeat
-  namespace: kube-system
+  namespace: bp-log
   labels:
     k8s-app: metricbeat
 spec:
@@ -246,7 +254,9 @@ spec:
         configMap:
           defaultMode: 0600
           name: metricbeat-deployment-modules
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
@@ -254,12 +264,14 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: metricbeat
-  namespace: kube-system
+  namespace: bp-log
 roleRef:
   kind: ClusterRole
   name: metricbeat
   apiGroup: rbac.authorization.k8s.io
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
@@ -276,11 +288,13 @@ rules:
   - get
   - watch
   - list
+
 ---
+
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: metricbeat
-  namespace: kube-system
+  namespace: bp-log
   labels:
     k8s-app: metricbeat

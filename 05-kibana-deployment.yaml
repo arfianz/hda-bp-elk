@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kibana-logging
-  namespace: kube-system
+  namespace: bp-log
   labels:
     k8s-app: kibana-logging
     kubernetes.io/cluster-service: "true"
@@ -35,12 +35,14 @@ spec:
         - containerPort: 5601
           name: ui
           protocol: TCP
+
 ---
+
 apiVersion: v1
 kind: Service
 metadata:
   name: kibana-logging
-  namespace: kube-system
+  namespace: bp-log
   labels:
     k8s-app: kibana-logging
     kubernetes.io/cluster-service: "true"
@@ -54,12 +56,14 @@ spec:
     targetPort: ui
   selector:
     k8s-app: kibana-logging
+
 #---
+
 #apiVersion: extensions/v1beta1
 #kind: Ingress
 #metadata:
 #  name: logs-ingress
-#  namespace: kube-system
+#  namespace: bp-log
 #  labels:
 #    app: logs
 #  annotations:
