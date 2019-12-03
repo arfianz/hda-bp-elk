@@ -17,6 +17,5 @@
 <br>$ kubectl apply -f 05-kibana-deployment.yaml
 <br>Untuk mengakses kibana, dapat dilihat di service dan lihat di endpoint
 <br>
-<br>Dikarenakan elasticsearch akan menyimpan semua data, dan lama kelamaan akan memakan space storage, maka dibuat cronjob
-<br>dengan memanfaatkan modul curator dari elasticsearch.
+<br>Dikarenakan elasticsearch akan menyimpan semua data, dan lama kelamaan akan memakan space storage, maka dibuat cronjob dengan memanfaatkan modul curator dari elasticsearch.
 <br>$ kubectl apply -f 06-curator-cronjob.yaml
